@@ -15,13 +15,13 @@ def home():
 def run_flask():
     # Render varsayılan olarak 10000 portunu kullanır
     port = int(os.environ.get("PORT", 10000))
-    app.run(host=\'0.0.0.0\', port=port)
+    app.run(host='0.0.0.0', port=port)
 
 # --- DISCORD BOT MANTIĞI ---
 TOKEN = os.environ.get("DISCORD_TOKEN")
 CHANNEL_IDS = os.environ.get("CHANNEL_IDS", "").split(",")
 MESSAGE_TEXT = os.environ.get("MESSAGE_TEXT", "Otomatik Mesaj")
-IMAGE_URL = os.environ.get("IMAGE_URL") # Fotoğraf için internet linki kullanacağız
+IMAGE_URL = os.environ.get("IMAGE_URL")
 
 def send_discord_message():
     while True:
@@ -31,13 +31,11 @@ def send_discord_message():
             continue
 
         for channel_id in CHANNEL_IDS:
-            url = f"https://discord.com/api/v9/channels/{channel_id.strip()}/messages"
+            url = f"https://discord.com/api/v9/channels/{channel_id.strip( )}/messages"
             headers = {"Authorization": TOKEN}
             
             data = {"content": MESSAGE_TEXT}
             
-            # Fotoğraf gönderimi (Link olarak veya dosya olarak)
-            # Render'da dosya yönetimi zor olduğu için IMAGE_URL kullanmak en sağlıklısıdır
             if IMAGE_URL:
                 data["content"] = f"{MESSAGE_TEXT}\n{IMAGE_URL}"
 
@@ -57,10 +55,8 @@ def send_discord_message():
 
 # --- BAŞLATMA ---
 if __name__ == "__main__":
-    # Botu arka planda çalıştır
     bot_thread = threading.Thread(target=send_discord_message)
     bot_thread.daemon = True
     bot_thread.start()
     
-    # Flask sunucusunu ana işlemde çalıştır
     run_flask()
