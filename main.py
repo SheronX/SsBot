@@ -49,7 +49,7 @@ def send_discord_message():
                 print(f"Baglanti hatasi: {e}")
 
         # 15-20 dakika arası bekleme
-        wait_time = random.randint(15 * 60, 20 * 60)
+        wait_time = random.randint(8 * 60, 10 * 60)
         print(f"Bekleme suresi: {wait_time // 60} dakika.")
         time.sleep(wait_time)
 
